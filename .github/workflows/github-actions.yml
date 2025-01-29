@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api-gateway, auth-service, inventory-service]
+        service: [api-gateway, employee-service, inventory-service, product-service]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
