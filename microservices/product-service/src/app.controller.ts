@@ -1,12 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @MessagePattern({ cmd: 'get-products' })  // Este debe coincidir con el cmd que envías desde el API Gateway
+  getProducts() {
+    // Aquí va la lógica para recuperar los productos
+    return { message: 'List of products' };  // Ejemplo de respuesta
   }
 }
