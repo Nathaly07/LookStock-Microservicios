@@ -1,12 +1,28 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Inject  } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 
-@Controller()
+@Controller("api")
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    @Inject('EMPLOYEE_SERVICE') private readonly userServiceClient: ClientProxy,
+    @Inject('INVENTORY_SERVICE') private readonly inventoryServiceClient: ClientProxy,
+    @Inject('PRODUCT_SERVICE') private readonly productServiceClient: ClientProxy,
+  ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('products')
+  getProducts(): Observable<any> {
+    return this.productServiceClient.send({ cmd: 'get-products' }, {});
+  }
+
+  @Get('inventory')
+  getInventories(): Observable<any> {
+    return this.inventoryServiceClient.send({ cmd: 'get-inventory' }, {});
+  }
+
+  @Get('employee')
+  getEmployees(): Observable<any> {
+    return this.userServiceClient.send({ cmd: 'get-employees' }, {});
   }
 }
