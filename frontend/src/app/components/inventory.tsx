@@ -174,7 +174,6 @@ const Inventory = () => {
           </tbody>
         </table>
       </div>
-
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <AddProduct onClose={closeModal} refreshProducts={refreshProducts} productToEdit={productToEdit ?? undefined}  />
