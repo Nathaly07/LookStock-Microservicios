@@ -177,7 +177,7 @@ const Inventory = () => {
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <AddProduct onClose={closeModal} refreshProducts={refreshProducts} productToEdit={productToEdit} />
+          <AddProduct onClose={closeModal} refreshProducts={refreshProducts} productToEdit={productToEdit ?? undefined}  />
         </Modal>
       )}
 
