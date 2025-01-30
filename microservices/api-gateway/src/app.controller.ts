@@ -9,6 +9,7 @@ export class AppController {
     @Inject('EMPLOYEE_SERVICE') private readonly userServiceClient: ClientProxy,
     @Inject('INVENTORY_SERVICE') private readonly inventoryServiceClient: ClientProxy,
     @Inject('PRODUCT_SERVICE') private readonly productServiceClient: ClientProxy,
+    @Inject('CHAT_SERVICE') private readonly chatServiceClient: ClientProxy,
   ) {}
 
   @Get('products')
@@ -24,5 +25,10 @@ export class AppController {
   @Get('employee')
   getEmployees(): Observable<any> {
     return this.userServiceClient.send({ cmd: 'get-employees' }, {});
+  }
+
+  @Get('chat')
+  getChats(): Observable<any> {
+    return this.chatServiceClient.send({ cmd: 'get-chats' }, {});
   }
 }

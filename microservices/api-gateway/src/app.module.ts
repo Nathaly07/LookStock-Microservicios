@@ -31,9 +31,17 @@ import { AppService } from './app.service';
           port: 3003,
         },
       },
+      {
+        name: 'CHATS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: 3004,
+        },
+      },
     ]),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
