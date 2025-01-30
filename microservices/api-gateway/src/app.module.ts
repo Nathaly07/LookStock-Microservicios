@@ -32,7 +32,7 @@ import { AppService } from './app.service';
         },
       },
       {
-        name: 'CHATS_SERVICE',
+        name: 'CHAT_SERVICE',
         transport: Transport.TCP,
         options: {
           host: 'localhost',
