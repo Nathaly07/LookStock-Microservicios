@@ -1,37 +1,38 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Patch } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { Products } from './products.entity';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('products')
+@Controller()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post()
-  async createProduct(@Body() productData: Partial<Products>) {
+  @MessagePattern({ cmd: 'post-products' })
+  async createProduct(@Payload() productData: Partial<Products>) {
     return await this.productService.createProduct(productData);
   }
 
-  @Put(':id')
-  async updateProduct(@Param('id') id: string, @Body() productData: Partial<Products>) {
-    return await this.productService.updateProduct(id, productData);
+  @MessagePattern({ cmd: 'put-products' })
+  async updateProduct(@Payload() data: { id: string; productData: Partial<Products> }) {
+    return await this.productService.updateProduct(data.id, data.productData);
   }
 
-  @Patch(':id/stock')
-  async updateStock(@Param('id') id: string, @Body('quantity') quantity: number) {
-    return await this.productService.updateStock(id, quantity);
+  @MessagePattern({ cmd: 'patch-stock' }) // Cambiado para diferenciar de get-products
+  async updateStock(@Payload() data: { id: string; quantity: number }) {
+    return await this.productService.updateStock(data.id, data.quantity);
   }
 
-  @Delete(':id')
-  async deleteProduct(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'delete-products' })
+  async deleteProduct(@Payload() id: string) {
     return await this.productService.deleteProduct(id);
   }
 
-  @Get(':id')
-  async getProductById(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'get-product-by-id' }) // Se cambia el nombre para evitar conflicto con get-products
+  async getProductById(@Payload() id: string) {
     return await this.productService.getProductById(id);
   }
 
-  @Get()
+  @MessagePattern({ cmd: 'get-products' })
   async getAllProducts() {
     return await this.productService.getAllProducts();
   }
