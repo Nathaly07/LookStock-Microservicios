@@ -1,33 +1,34 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Prisma } from '@prisma/client';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('employee')
+@Controller()
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @Get()
+  @MessagePattern({ cmd: 'get-employees' })
   getAllEmployees() {
     return this.employeeService.getAllEmployees();
   }
 
-  @Get(':id')
-  getEmployeeById(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'get-employee-by-id' })
+  getEmployeeById(@Payload() id: string) {
     return this.employeeService.getEmployeeById(id);
   }
 
-  @Post()
-  createEmployee(@Body() data: Prisma.EmployeeCreateInput) {
+  @MessagePattern({ cmd: 'create-employee' })
+  createEmployee(@Payload() data: Prisma.EmployeeCreateInput) {
     return this.employeeService.createEmployee(data);
   }
 
-  @Put(':id')
-  updateEmployee(@Param('id') id: string, @Body() data: Prisma.EmployeeUpdateInput) {
-    return this.employeeService.updateEmployee(id, data);
+  @MessagePattern({ cmd: 'update-employee' })
+  updateEmployee(@Payload() payload: { id: string; data: Prisma.EmployeeUpdateInput }) {
+    return this.employeeService.updateEmployee(payload.id, payload.data);
   }
 
-  @Delete(':id')
-  deleteEmployee(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'delete-employee' })
+  deleteEmployee(@Payload() id: string) {
     return this.employeeService.deleteEmployee(id);
   }
 }
