@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Inject  } from '@nestjs/common';
+import { Controller, Get, Inject , Post} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 
@@ -20,6 +20,11 @@ export class AppController {
   @Get('inventory')
   getInventories(): Observable<any> {
     return this.inventoryServiceClient.send({ cmd: 'get-inventory' }, {});
+  }
+
+  @Post('inventory')
+  postInventories(): Observable<any> {
+    return this.inventoryServiceClient.send({ cmd: 'post-inventory' }, {});
   }
 
   @Get('employee')
