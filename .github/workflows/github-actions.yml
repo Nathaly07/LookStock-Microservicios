@@ -48,13 +48,19 @@ jobs:
 
       - name: Run build
         run: cd backend && npm run build
-        
+
   build-microservices:
     name: Build Microservices
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api-gateway, employee-service, inventory-service, product-service, chat-service]
+        service: 
+          - { name: "api-gateway", db: "" }
+          - { name: "employee-service", db: "lookstock_employees" }
+          - { name: "inventory-service", db: "lookstock_inventory_logs" }
+          - { name: "product-service", db: "lookstock_products" }
+          - { name: "chat-service", db: "lookstock_chats" }
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -64,10 +70,21 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-          cache-dependency-path: microservices/${{ matrix.service }}/package-lock.json
+          cache-dependency-path: microservices/${{ matrix.service.name }}/package-lock.json
+
+      - name: Create .env file
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_NAME=${{ matrix.service.db }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_ENCRYPT=${{ secrets.DB_ENCRYPT }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_TRUST_SERVER_CERT=${{ secrets.DB_TRUST_SERVER_CERT }}" >> microservices/${{ matrix.service.name }}/.env
+          echo "DB_CONNECTION_TIMEOUT=${{ secrets.DB_CONNECTION_TIMEOUT }}" >> microservices/${{ matrix.service.name }}/.env
 
       - name: Install dependencies
-        run: cd microservices/${{ matrix.service }} && npm install
+        run: cd microservices/${{ matrix.service.name }} && npm install
 
       - name: Run build
-        run: cd microservices/${{ matrix.service }} && npm run build
+        run: cd microservices/${{ matrix.service.name }} && npm run build
