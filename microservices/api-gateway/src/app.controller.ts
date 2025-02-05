@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Controller("api")
 export class AppController {
   constructor(
-    @Inject('EMPLOYEE_SERVICE') private readonly userServiceClient: ClientProxy,
+    @Inject('EMPLOYEE_SERVICE') private readonly employeeServiceClient: ClientProxy,
     @Inject('INVENTORY_SERVICE') private readonly inventoryServiceClient: ClientProxy,
     @Inject('PRODUCT_SERVICE') private readonly productServiceClient: ClientProxy,
     @Inject('CHAT_SERVICE') private readonly chatServiceClient: ClientProxy,
@@ -63,6 +63,13 @@ export class AppController {
   getEmployees(): Observable<any> {
     return this.userServiceClient.send({ cmd: 'get-employees' }, {});
   }
+
+  @Delete('employees/:id')
+  deleteEmployee(@Param('id') id: string): Observable<any> {
+    return this.employeeServiceClient.send({ cmd: 'delete-employee' }, id);
+  }
+
+  /** -------------------- CHAT -------------------- */
 
   /** -------------------- CHAT -------------------- */
 
