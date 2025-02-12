@@ -19,7 +19,7 @@ import { AppService } from './app.service';
         name: 'INVENTORY_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'inventory-service-container',
           port: 3002,
         },
       },
