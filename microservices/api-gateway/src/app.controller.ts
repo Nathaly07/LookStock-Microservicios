@@ -57,6 +57,11 @@ export class AppController {
     return this.inventoryServiceClient.send({ cmd: 'get-inventory' }, {});
   }
 
+  @Post('inventory')
+  postInventories(): Observable<any> {
+    return this.inventoryServiceClient.send({ cmd: 'post-inventory' }, {});
+  }
+
   /** -------------------- EMPLEADOS -------------------- */
 
   @Get('employees')

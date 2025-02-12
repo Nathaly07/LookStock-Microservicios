@@ -1,36 +1,49 @@
 services:
-  employee-service:
-    build: ./employee-service
+  apigateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     ports:
-      - "3001:3001"
-    environment:
-      - DATABASE_URL=sqlserver://<usuario>:<contraseña>@<servidor>.database.windows.net:1433;database=<nombre_db>;encrypt=true
-    networks:
-      - microservices-network
-    depends_on:
-      - db
-
-
-  api-gateway:
-    build: ./api-gateway
-    ports:
-      - "3000:3000"
-    networks:
-      - microservices-network
+      - "4000:4000"
     depends_on:
       - employee-service
-
-  db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver_db
-    environment:
-      SA_PASSWORD: "TuPassword123!"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
+      - inventory-service
+      - product-service
     networks:
-      - microservices-network
+      - lookstock-nt
 
+  employee-service:
+    build:
+      context: ./employee-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./employee-service/.env
+    networks:
+      - lookstock-nt
+
+  inventory-service:
+    build:
+      context: ./inventory-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./inventory-service/.env
+    networks:
+      - lookstock-nt
+
+  product-service:
+    build:
+      context: ./product-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./product-service/.env
+    networks:
+      - lookstock-nt
 networks:
-  microservices-network:
+  lookstock-nt:
     driver: bridge
