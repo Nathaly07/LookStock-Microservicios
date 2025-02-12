@@ -1,35 +1,24 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { EmployeeService } from './employee/employee.service';
-import { Prisma } from '@prisma/client';
+import { Controller, Get, Post, Param, Body, Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 
 @Controller()
 export class AppController {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(
+    @Inject('EMPLOYEE_SERVICE') private readonly employeeServiceClient: ClientProxy
+  ) {}
 
-  @MessagePattern({ cmd: 'get-employees' })
-  getEmployees() {
-    return this.employeeService.getAllEmployees();
+  /** 🟢 Obtener un empleado por ID */
+  @Get('employees/:id')
+  getEmployeeById(@Param('id') id: string): Observable<any> {
+    return this.employeeServiceClient.send({ cmd: 'get-employee-by-uid' }, { uid: id });
   }
 
-  @MessagePattern({ cmd: 'get-employee-by-id' })
-  getEmployeeById(@Payload() id: string) {
-    return this.employeeService.getEmployeeById(id);
-  }
-
-  @MessagePattern({ cmd: 'create-employee' })
-  createEmployee(@Payload() data: Prisma.EmployeeCreateInput) {
-    return this.employeeService.createEmployee(data);
-  }
-
-  @MessagePattern({ cmd: 'update-employee' })
-  updateEmployee(@Payload() payload: { id: string; data: Prisma.EmployeeUpdateInput }) {
-    return this.employeeService.updateEmployee(payload.id, payload.data);
-  }
-
-  @MessagePattern({ cmd: 'delete-employee' })
-  deleteEmployee(@Payload() id: string) {
-    return this.employeeService.deleteEmployee(id);
+  /** 🔵 Registrar un nuevo empleado */
+  @Post('employees')
+  createEmployee(@Body() data: any): Observable<any> {
+    return this.employeeServiceClient.send({ cmd: 'register' }, data);
   }
 }
+
 

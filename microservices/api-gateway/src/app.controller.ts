@@ -64,27 +64,17 @@ export class AppController {
 
   /** -------------------- EMPLEADOS -------------------- */
 
-  @Get('employees')
-  getEmployees(): Observable<any> {
-    return this.employeeServiceClient.send({ cmd: 'get-employees' }, {});
-  }
-  @Get('employees/:id')
-  getEmployeeById(@Param('id') id: string): Observable<any> {
-    return this.employeeServiceClient.send({ cmd: 'get-employee-by-id' }, id);
-  }
-  @Post('employees')
-  createEmployee(@Body() data: any): Observable<any> {
-    return this.employeeServiceClient.send({ cmd: 'create-employee' }, data);
-  }
-  @Put('employees/:id')
-  updateEmployee(@Param('id') id: string, @Body() data: any): Observable<any> {
-    return this.employeeServiceClient.send({ cmd: 'update-employee' }, { id, data });
-  }
-  @Delete('employees/:id')
-  deleteEmployee(@Param('id') id: string): Observable<any> {
-    return this.employeeServiceClient.send({ cmd: 'delete-employee' }, id);
+    /** 🟢 Registro de empleados */
+  @Post('auth/register')
+  registerEmployee(@Body() data: any): Observable<any> {
+    return this.employeeServiceClient.send({ cmd: 'register' }, data);
   }
 
+  /** 🔵 Inicio de sesión */
+  @Post('auth/login')
+  loginEmployee(@Body('token') token: string): Observable<any> {
+    return this.employeeServiceClient.send({ cmd: 'login' }, { token });
+  }
   /** -------------------- CHAT -------------------- */
 
   /** -------------------- CHAT -------------------- */
