@@ -74,14 +74,18 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_NAME=${{ matrix.service.db }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_PASS=${{ secrets.DB_PASS }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_ENCRYPT=${{ secrets.DB_ENCRYPT }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_TRUST_SERVER_CERT=${{ secrets.DB_TRUST_SERVER_CERT }}" >> microservices/${{ matrix.service.name }}/.env
-          echo "DB_CONNECTION_TIMEOUT=${{ secrets.DB_CONNECTION_TIMEOUT }}" >> microservices/${{ matrix.service.name }}/.env
+          if [[ "${{ matrix.service.name }}" == "employee-service" ]]; then
+            echo "DB_CONNECTION_STRING=${{ secrets.DATABASE_URL }}" >> microservices/${{ matrix.service.name }}/.env
+          else
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_NAME=${{ matrix.service.db }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_PASS=${{ secrets.DB_PASS }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_ENCRYPT=${{ secrets.DB_ENCRYPT }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_TRUST_SERVER_CERT=${{ secrets.DB_TRUST_SERVER_CERT }}" >> microservices/${{ matrix.service.name }}/.env
+            echo "DB_CONNECTION_TIMEOUT=${{ secrets.DB_CONNECTION_TIMEOUT }}" >> microservices/${{ matrix.service.name }}/.env
+          fi
 
       - name: Install dependencies
         run: cd microservices/${{ matrix.service.name }} && npm install
