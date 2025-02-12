@@ -9,7 +9,6 @@ async function bootstrap() {
   });
 
   await app.listen();
-  console.log('Inventory Service is running on port 3002');
 }
 
 bootstrap();

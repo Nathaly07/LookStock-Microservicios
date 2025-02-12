@@ -11,7 +11,7 @@ import { AppService } from './app.service';
         name: 'EMPLOYEE_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'employee-service-container',
           port: 3001,
         },
       },
@@ -27,7 +27,7 @@ import { AppService } from './app.service';
         name: 'PRODUCT_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'product-service-container',
           port: 3003,
         },
       },
@@ -35,7 +35,7 @@ import { AppService } from './app.service';
         name: 'CHAT_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'chat--service-container',
           port: 3004,
         },
       },
