@@ -1,14 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { EmployeeService } from './employee/employee.service';
+import { EmployeeService } from './employee.service';
 import { Prisma } from '@prisma/client';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
-export class AppController {
+export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @MessagePattern({ cmd: 'get-employees' })
-  getEmployees() {
+  getAllEmployees() {
     return this.employeeService.getAllEmployees();
   }
 
@@ -32,4 +32,3 @@ export class AppController {
     return this.employeeService.deleteEmployee(id);
   }
 }
-
